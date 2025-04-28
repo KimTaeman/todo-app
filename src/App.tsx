@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Button } from './components/ui/button';
 import { IoIosAdd } from 'react-icons/io';
 import { FaRegCircle } from 'react-icons/fa';
 import { FaRegDotCircle } from 'react-icons/fa';
 import TodoCard from './components/my-components/TodoCard';
-
+import { Axios } from "../todo-backend/axiosInstance";
 import './App.css';
 
 type Todo = {
@@ -26,6 +26,7 @@ const initialTodos: Todo[] = [
   },
 ];
 
+
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -43,7 +44,14 @@ const App = () => {
     setTodos((prev) => [...prev, newTodo]);
     setNewTodoText('');
   };
-
+  const testConnection = async () => {
+		try {
+			const data = await Axios.get('/');
+			console.log(data.data);
+		} catch (e) {
+			console.log(`Error fetching backend server: ${e}`);
+		}
+	};
   // Start editing a todo
   const handleEditClick = (todo: Todo) => {
     setEditingId(todo.id);
@@ -88,6 +96,9 @@ const App = () => {
   const handleDelete = (id: number) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
+  useEffect(() => {
+    testConnection();
+  }, []);
 
   return (
     <div className='flex items-center justify-center h-screen'>
