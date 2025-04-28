@@ -2,9 +2,15 @@ import { Hono } from "hono";
 import { logger } from "hono/logger";
 import todoRoutes from "./routes/todo.routes.ts";
 import { serve } from "@hono/node-server";
-
+import {cors} from "hono/cors"
+import { Axios } from "../axiosInstance.ts";
 // Create a new Hono app
 const app = new Hono();
+app.use(
+	cors({
+		origin: ['http://localhost:5173'], // Your frontend application
+	})
+);
 
 // Add middleware for logging requests
 app.use("*", logger());
