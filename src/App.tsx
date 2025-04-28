@@ -3,7 +3,6 @@ import { Button } from './components/ui/button';
 import { IoIosAdd } from 'react-icons/io';
 import { FaRegCircle } from 'react-icons/fa';
 import { FaRegDotCircle } from 'react-icons/fa';
-import TodoCard from './components/my-components/TodoCard';
 
 import './App.css';
 
@@ -106,7 +105,6 @@ const App = () => {
             onKeyDown={(e) => handleInputKeyDown(e)}
           />
         </div>
-        <TodoCard />
 
         {/* Todo List */}
         <div className='flex flex-col gap-5'>

@@ -1,51 +1,76 @@
 import React from 'react';
-import { Button } from './components/ui/button';
-import { FaRegCircle } from 'react-icons/fa';
-import { FaRegDotCircle } from 'react-icons/fa';
+import { Button } from './ui/button';
+import { FaRegCircle, FaRegDotCircle } from 'react-icons/fa';
 
-const TodoCard = ({ id, success, name }) => {
+type TodoCardProps = {
+  todo: {
+    id: number,
+    name: string,
+    success: boolean,
+  },
+  editingId: number | null,
+  editingText: string,
+  onToggleSuccess: (id: number) => void,
+  onEditClick: (todo: { id: number, name: string }) => void,
+  onSaveClick: (id: number) => void,
+  onDelete: (id: number) => void,
+  onEditingTextChange: (text: string) => void,
+  onInputKeyDown: (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    id?: number
+  ) => void,
+};
+
+const TodoCard = ({
+  todo,
+  editingId,
+  editingText,
+  onToggleSuccess,
+  onEditClick,
+  onSaveClick,
+  onDelete,
+  onEditingTextChange,
+  onInputKeyDown,
+}: TodoCardProps) => {
   return (
-    <div key={id} className='flex gap-5 items-center bg-white rounded-2xl p-5'>
+    <div className='flex gap-5 items-center bg-white rounded-2xl p-5'>
       {/* Success Toggle */}
       <span
-        onClick={() => toggleSuccess(id)}
+        onClick={() => onToggleSuccess(todo.id)}
         className='cursor-pointer text-2xl'
       >
-        {success ? <FaRegDotCircle /> : <FaRegCircle />}
+        {todo.success ? <FaRegDotCircle /> : <FaRegCircle />}
       </span>
 
       {/* Todo Text or Edit Input */}
       {editingId === todo.id ? (
         <input
           value={editingText}
-          onChange={(e) => setEditingText(e.target.value)}
-          onKeyDown={(e) => handleInputKeyDown(e, todo.id)}
+          onChange={(e) => onEditingTextChange(e.target.value)}
+          onKeyDown={(e) => onInputKeyDown(e, todo.id)}
           className='border-b border-gray-400 outline-none'
+          autoFocus
         />
       ) : (
-        <h1 className={success ? 'line-through' : ''}>{name}</h1>
+        <h1 className={todo.success ? 'line-through' : ''}>{todo.name}</h1>
       )}
 
       {/* Buttons */}
-      {editingId === id ? (
+      {editingId === todo.id ? (
         <Button
           variant='outline'
           size='sm'
-          onClick={handleSave}
+          onClick={() => onSaveClick(todo.id)}
         >
           Save
         </Button>
       ) : (
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={handleEdit}
-        >
+        <Button variant='outline' size='sm' onClick={() => onEditClick(todo)}>
           Edit
         </Button>
       )}
 
-      <Button variant='outline' size='sm' onClick={handleDelete}>
+      <Button variant='outline' size='sm' onClick={() => onDelete(todo.id)}>
         X
       </Button>
     </div>
