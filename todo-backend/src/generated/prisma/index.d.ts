@@ -1980,13 +1980,13 @@ export namespace Prisma {
 
   export type TodoCreateInput = {
     name: string
-    success: boolean
+    success?: boolean
   }
 
   export type TodoUncheckedCreateInput = {
     id?: number
     name: string
-    success: boolean
+    success?: boolean
   }
 
   export type TodoUpdateInput = {
@@ -2003,7 +2003,7 @@ export namespace Prisma {
   export type TodoCreateManyInput = {
     id?: number
     name: string
-    success: boolean
+    success?: boolean
   }
 
   export type TodoUpdateManyMutationInput = {
