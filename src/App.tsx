@@ -3,6 +3,7 @@ import { Button } from './components/ui/button';
 import { IoIosAdd } from 'react-icons/io';
 import { FaRegCircle } from 'react-icons/fa';
 import { FaRegDotCircle } from 'react-icons/fa';
+import TodoCard from './components/my-components/TodoCard';
 
 import './App.css';
 
@@ -107,61 +108,23 @@ const App = () => {
         </div>
 
         {/* Todo List */}
+
         <div className='flex flex-col gap-5'>
           {todos.map((todo) => (
-            <div
+            <TodoCard
               key={todo.id}
-              className='flex gap-5 items-center bg-white rounded-2xl p-5'
-            >
-              {/* Success Toggle */}
-              <span
-                onClick={() => toggleSuccess(todo.id)}
-                className='cursor-pointer text-2xl'
-              >
-                {todo.success ? <FaRegDotCircle /> : <FaRegCircle />}
-              </span>
-
-              {/* Todo Text or Edit Input */}
-              {editingId === todo.id ? (
-                <input
-                  value={editingText}
-                  onChange={(e) => setEditingText(e.target.value)}
-                  onKeyDown={(e) => handleInputKeyDown(e, todo.id)}
-                  className='border-b border-gray-400 outline-none'
-                />
-              ) : (
-                <h1 className={todo.success ? 'line-through' : ''}>
-                  {todo.name}
-                </h1>
-              )}
-
-              {/* Buttons */}
-              {editingId === todo.id ? (
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={() => handleSaveClick(todo.id)}
-                >
-                  Save
-                </Button>
-              ) : (
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={() => handleEditClick(todo)}
-                >
-                  Edit
-                </Button>
-              )}
-
-              <Button
-                variant='outline'
-                size='sm'
-                onClick={() => handleDelete(todo.id)}
-              >
-                X
-              </Button>
-            </div>
+              id={todo.id}
+              success={todo.success}
+              name={todo.name}
+              handleSuccessToggle={() => toggleSuccess(todo.id)}
+              handleSave={() => handleSaveClick(todo.id)}
+              handleEdit={() => handleEditClick(todo)}
+              handleDelete={() => handleDelete(todo.id)}
+              editingId={editingId}
+              editingText={editingText}
+              handleInputChange={(e) => setEditingText(e.target.value)}
+              handleKeyDown={(e) => handleInputKeyDown(e, todo.id)}
+            />
           ))}
         </div>
       </div>
