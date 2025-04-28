@@ -1,11 +1,13 @@
 import { serve } from "@hono/node-server";
-import { Hono } from "hono";
-import { PrismaClient } from "./generated/prisma/index.js";
-import { mainRouter } from "./router/index.routes.ts";
-import { logger } from "hono/logger";
-
+import {cors} from "hono/cors"
+import { Axios } from "../axiosInstance.ts";
+// Create a new Hono app
 const app = new Hono();
-const db = new PrismaClient();
+app.use(
+	cors({
+		origin: ['http://localhost:5173'], // Your frontend application
+	})
+);
 
 app.use(logger());
 
