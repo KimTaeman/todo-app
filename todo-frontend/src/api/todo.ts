@@ -15,3 +15,21 @@ export const getTodo = async () => {
     };
   }
 };
+
+export const createTodo = async (newTodoName: string) => {
+  try {
+    const response = await Axios.post('/todo', {
+      name: newTodoName,
+    });
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      success: false,
+      data: null,
+    };
+  }
+};

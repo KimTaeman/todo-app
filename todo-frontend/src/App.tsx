@@ -3,22 +3,9 @@ import { Button } from './components/ui/button';
 import { IoIosAdd } from 'react-icons/io';
 import TodoCard from './components/my-components/TodoCard.jsx';
 import { Axios } from '../axiosInstance.ts';
-import { getTodo } from './api/todo.ts';
+import { createTodo, getTodo } from './api/todo.ts';
 
 import './App.css';
-
-// const initialTodos: Todo[] = [
-//   {
-//     id: 1,
-//     name: 'Learn Frontend',
-//     success: true,
-//   },
-//   {
-//     id: 2,
-//     name: 'Learn Backend',
-//     success: false,
-//   },
-// ];
 
 const App = () => {
   const testConnection = async () => {
@@ -30,16 +17,21 @@ const App = () => {
     }
   };
 
+  const fetchTodoData = async () => {
+    const data = await getTodo();
+    if (data.success) {
+      console.log(data.data.data);
+      setTodo(data.data.data);
+    }
+  };
+
   useEffect(() => {
     testConnection();
   }, []);
 
-  // async function handleFetchTodoData() {
-  //   const resp = await getTodoAPI();
-  //   if (resp.success && resp.data !== null) {
-  //     setTodos(resp.data);
-  //   }
-  // }
+  useEffect(() => {
+    fetchTodoData();
+  }, []);
 
   type Todo = {
     id: number;
@@ -49,27 +41,19 @@ const App = () => {
 
   const [todo, setTodo] = useState<Todo[]>([]);
 
-  const fetchTodoData = async () => {
-    const data = await getTodo();
-    if (data.success) {
-      setTodo(data.data);
-    }
-  };
-
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingText, setEditingText] = useState<string>('');
   const [newTodoText, setNewTodoText] = useState<string>('');
 
   // Handle adding new todo
-  const handleAddTodo = () => {
+  const handleAddTodo = async () => {
     if (newTodoText.trim() === '') return;
-    const newTodo: Todo = {
-      id: Date.now(),
-      name: newTodoText,
-      success: false,
-    };
-    setTodo((prev) => [...prev, newTodo]);
-    setNewTodoText('');
+
+    const result = await createTodo(newTodoText);
+    if (result.success) {
+      setTodo((prev) => [...prev, result.data.data]);
+      setNewTodoText('');
+    }
   };
 
   // Start editing a todo
@@ -116,9 +100,6 @@ const App = () => {
   const handleDelete = (id: number) => {
     setTodo((prev) => prev.filter((todo) => todo.id !== id));
   };
-  useEffect(() => {
-    testConnection();
-  }, []);
 
   return (
     <div className='flex items-center justify-center h-screen'>
