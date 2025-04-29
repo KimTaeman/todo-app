@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from './components/ui/button';
 import { IoIosAdd } from 'react-icons/io';
-import { FaRegCircle } from 'react-icons/fa';
-import { FaRegDotCircle } from 'react-icons/fa';
-import TodoCard from '../src/components/my-components/TodoCard.jsx';
-import { Axios } from 'axiosInstance.js';
+import TodoCard from './components/my-components/TodoCard.jsx';
+import { Axios } from '../axiosInstance.ts';
+import { getTodo } from './api/todo.ts';
 
 import './App.css';
 
@@ -57,11 +56,6 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    fetchTodoData();
-  }, []);
-
-  const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingText, setEditingText] = useState<string>('');
   const [newTodoText, setNewTodoText] = useState<string>('');
@@ -74,17 +68,10 @@ const App = () => {
       name: newTodoText,
       success: false,
     };
-    setTodos((prev) => [...prev, newTodo]);
+    setTodo((prev) => [...prev, newTodo]);
     setNewTodoText('');
   };
-  const testConnection = async () => {
-    try {
-      const data = await Axios.get('/');
-      console.log(data.data);
-    } catch (e) {
-      console.log(`Error fetching backend server: ${e}`);
-    }
-  };
+
   // Start editing a todo
   const handleEditClick = (todo: Todo) => {
     setEditingId(todo.id);
@@ -93,7 +80,7 @@ const App = () => {
 
   // Save edited todo
   const handleSaveClick = (id: number) => {
-    setTodos((prev) =>
+    setTodo((prev) =>
       prev.map((todo) =>
         todo.id === id ? { ...todo, name: editingText } : todo
       )
@@ -118,7 +105,7 @@ const App = () => {
 
   // Toggle success status
   const toggleSuccess = (id: number) => {
-    setTodos((prev) =>
+    setTodo((prev) =>
       prev.map((todo) =>
         todo.id === id ? { ...todo, success: !todo.success } : todo
       )
@@ -127,7 +114,7 @@ const App = () => {
 
   // Delete a todo
   const handleDelete = (id: number) => {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    setTodo((prev) => prev.filter((todo) => todo.id !== id));
   };
   useEffect(() => {
     testConnection();
@@ -154,7 +141,7 @@ const App = () => {
         {/* Todo List */}
 
         <div className='flex flex-col gap-5'>
-          {todos.map((todo) => (
+          {todo.map((todo) => (
             <TodoCard
               key={todo.id}
               id={todo.id}

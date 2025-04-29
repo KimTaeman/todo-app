@@ -1,6 +1,6 @@
-import { Axios } from 'axiosInstance';
+import { Axios } from '../../axiosInstance';
 
-const getTodo = async () => {
+export const getTodo = async () => {
   try {
     const response = await Axios.get('/todo'); // Your todo api path of getting todo
     return {
