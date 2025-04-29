@@ -53,6 +53,22 @@ export const updateTodoName = async (id: number, newTodoName: string) => {
   }
 };
 
+export const updateTodoStatus = async (id: number) => {
+  try {
+    const response = await Axios.patch(`/todo/success/${id}`);
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      success: false,
+      data: null,
+    };
+  }
+};
+
 export const deleteTodo = async (id: number) => {
   try {
     const response = await Axios.delete(`/todo/${id}`);

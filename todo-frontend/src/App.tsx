@@ -3,7 +3,13 @@ import { Button } from "./components/ui/button";
 import { IoIosAdd } from "react-icons/io";
 import TodoCard from "./components/my-components/TodoCard.jsx";
 import { Axios } from "../axiosInstance.ts";
-import { createTodo, getTodo, updateTodoName, deleteTodo } from "./api/todo.ts";
+import {
+  createTodo,
+  getTodo,
+  updateTodoName,
+  deleteTodo,
+  updateTodoStatus,
+} from "./api/todo.ts";
 
 import "./App.css";
 
@@ -97,12 +103,17 @@ const App = () => {
   };
 
   // Toggle success status
-  const toggleSuccess = (id: number) => {
-    setTodo((prev) =>
-      prev.map((todo) =>
-        todo.id === id ? { ...todo, success: !todo.success } : todo
-      )
-    );
+  const toggleSuccess = async (id: number) => {
+    const toggle = await updateTodoStatus(id);
+    if (toggle) {
+      setTodo((prev) =>
+        prev.map((todo) =>
+          todo.id === id ? { ...todo, success: !todo.success } : todo
+        )
+      );
+    } else {
+      alert("Failed to update status");
+    }
   };
 
   // Delete a todo
