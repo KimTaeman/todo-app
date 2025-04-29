@@ -1,32 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from './components/ui/button';
 import { IoIosAdd } from 'react-icons/io';
 import { FaRegCircle } from 'react-icons/fa';
 import { FaRegDotCircle } from 'react-icons/fa';
-import TodoCard from './components/my-components/TodoCard';
+import TodoCard from '../src/components/my-components/TodoCard.jsx';
+import { Axios } from 'axiosInstance.js';
 
 import './App.css';
 
-type Todo = {
-  id: number;
-  name: string;
-  success: boolean;
-};
-
-const initialTodos: Todo[] = [
-  {
-    id: 1,
-    name: 'Learn Frontend',
-    success: true,
-  },
-  {
-    id: 2,
-    name: 'Learn Backend',
-    success: false,
-  },
-];
+// const initialTodos: Todo[] = [
+//   {
+//     id: 1,
+//     name: 'Learn Frontend',
+//     success: true,
+//   },
+//   {
+//     id: 2,
+//     name: 'Learn Backend',
+//     success: false,
+//   },
+// ];
 
 const App = () => {
+  const testConnection = async () => {
+    try {
+      const data = await Axios.get('/');
+      console.log(data.data);
+    } catch (e) {
+      console.log(`Error fetching backend server: ${e}`);
+    }
+  };
+
+  useEffect(() => {
+    testConnection();
+  }, []);
+
+  // async function handleFetchTodoData() {
+  //   const resp = await getTodoAPI();
+  //   if (resp.success && resp.data !== null) {
+  //     setTodos(resp.data);
+  //   }
+  // }
+
+  type Todo = {
+    id: number;
+    name: string;
+    success: boolean;
+  };
+
+  const [todo, setTodo] = useState<Todo[]>([]);
+
+  const fetchTodoData = async () => {
+    const data = await getTodo();
+    if (data.success) {
+      setTodo(data.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchTodoData();
+  }, []);
+
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingText, setEditingText] = useState<string>('');
@@ -43,7 +77,14 @@ const App = () => {
     setTodos((prev) => [...prev, newTodo]);
     setNewTodoText('');
   };
-
+  const testConnection = async () => {
+    try {
+      const data = await Axios.get('/');
+      console.log(data.data);
+    } catch (e) {
+      console.log(`Error fetching backend server: ${e}`);
+    }
+  };
   // Start editing a todo
   const handleEditClick = (todo: Todo) => {
     setEditingId(todo.id);
@@ -88,6 +129,9 @@ const App = () => {
   const handleDelete = (id: number) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
+  useEffect(() => {
+    testConnection();
+  }, []);
 
   return (
     <div className='flex items-center justify-center h-screen'>
