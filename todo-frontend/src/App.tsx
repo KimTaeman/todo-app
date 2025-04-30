@@ -128,8 +128,8 @@ const App = () => {
         <div className='text-xs md:text-lg lg:text-xl flex flex-col gap-5'>
           {/* Add Todo Section */}
           <div className='flex bg-violet-400 text-white rounded-2xl px-10 py-2 gap-2'>
-            <Button variant='none' size='sm' onClick={handleAddTodo}>
-              <IoIosAdd />
+            <Button variant='none' onClick={handleAddTodo}>
+              <IoIosAdd style={{ fontSize: 'px' }} />
             </Button>
             <input
               type='text'
